@@ -18,12 +18,12 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Title
-email: contact@chaoticgood.co
+title: Terry Robb, Product Designer
+email: terry@chaoticgood.co
 description: >- # this means to ignore newlines until "baseurl:"
   Description is empty
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "http://terrancerobb.com/" # the base hostname & protocol for your site, e.g. http://example.com
 exclude: [_exclude]
 
 # Exclude from processing.
@@ -45,5 +45,3 @@ exclude: [_exclude]
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
-
-theme: jekyll-theme-cayman
