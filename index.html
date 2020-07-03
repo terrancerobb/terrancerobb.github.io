@@ -1,0 +1,32 @@
+---
+# Feel free to add content and custom Front Matter to this file.
+# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
+
+layout: default
+title: Terry Robb, Product Designer
+bodyClass: home page-template page-template-layouts page-template-home
+mainClass: site-main tr-main tr-main--home
+mainContentClass: tr-main--home__content
+---
+
+<p>My name is Terry Robb, and <strong class="bigStrong"><em>I’m a Product Designer &amp; Problem Solver.</em></strong></p>
+<hr>
+<h3>Recent Work</h3>
+
+<ul>
+  {% for post in site.posts %}
+    <li>
+      <a href="{{ post.url }}">{{ post.shortTitle }}</a>
+    </li>
+  {% endfor %}
+</ul>
+
+<h3>Writing</h3>
+
+<ol><li><a href="https://uxdesign.cc/being-a-great-designer-is-about-more-than-being-great-at-design-2236eca7319d">Being a great designer is about more than being great at&nbsp;design</a></li></ol>
+
+<h3>Contact</h3>
+<ul class="tr-contact">
+	<li><a href="https://www.linkedin.com/in/terryrobb/" target="_blank">LinkedIn</a></li>
+	<li><a href="mailto:terry@chaoticgood.co" target="_blank">Email</a></li>
+</ul>
