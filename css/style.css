@@ -885,7 +885,16 @@ figure{
 
 figure img{
   width: auto;
-  max-width: 960px;
+  max-width: 100%;
+}
+
+@media screen and (min-width: 60rem){
+	figure img{
+	  max-width: 960px;
+	}
+	figure img.full-width-img{
+		max-width: 100%;
+	}
 }
 
 .tr-main__content strong.homeStrong{
@@ -1125,6 +1134,11 @@ body.custom-background.page-template-case-study{
     max-width: 960px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.tr-960w em{
+	text-align: center;
+	display: block;
 }
 
 h2.tr-960w,
