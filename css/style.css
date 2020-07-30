@@ -854,6 +854,50 @@ strong.bigStrong{
     }
 }
 
+.tr-skills, .tr-skills ul{
+	font-size: 1rem;
+}
+
+.tr-skills ul{
+	margin: 1rem 0 2rem;
+	list-style: none;
+	padding-inline-start: 0;
+}
+
+.tr-skills li.uiux{
+	background-color: #06ce78;
+}
+
+.tr-skills li.whiteboarding{
+	background-color: #6665dd;
+}
+
+.tr-skills li.flowmapping{
+	background-color: #fa726e;
+}
+
+.tr-skills li.heatmaps{
+	background-color: #ffb92e;
+}
+
+.tr-skills li.empathy{
+	background-color: #2364ef;
+}
+
+.tr-skills strong{
+	display: block;
+}
+
+.tr-skills li{
+	display: inline-block;
+	margin: 0 0.1rem 0.75rem 0;
+	padding: 0.4rem 1.25rem;
+	color: #fff;
+	background-color: #4ad5ee;
+	border-radius: 2rem;
+	font-size: 1rem;
+}
+
 .tr-main--home__content p{
     margin-top: 0;
     font-size: 2.5rem;
