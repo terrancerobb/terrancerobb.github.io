@@ -803,8 +803,8 @@ a:hover, a:active {
     max-width: 1280px;
     padding: 1rem 1rem 6rem;
 }
-.tr-main.tr-main--case-study{
-    max-width: 1280px;
+.tr-main{
+	background-image: url("/img/main/dot-grid.png");
 }
 @media screen and (min-width: 60em) {
     body.tr-main{
