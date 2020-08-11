@@ -159,6 +159,7 @@
       if($win.width() > 960){
         homeAnimation();
       }
+
     });
     $win.scroll(function() {dirty.scroll = true;});
     $win.resize(function() {dirty.resize = true;});
