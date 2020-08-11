@@ -407,15 +407,14 @@ h1, h2, h3, h4, h5, h6 {
 	clear: both;
 }
 
+h1{
+	font-size: 3rem;
+}
+
 h2{
     font-size: 2rem;
     margin: 0;
     line-height: 1.2;
-}
-@media screen and (min-width: 40rem){
-    h2{
-        font-size: 4rem;
-    }
 }
 
 h4{
@@ -812,6 +811,11 @@ a:hover, a:active {
         padding: 2rem;
     }
 }
+
+.tr-main--case-study section{
+	margin-bottom: 4rem;
+}
+
 .tr-white-box{
     background: #fff;
     border-radius: 3.5rem;
@@ -998,7 +1002,7 @@ figcaption{
 .site-branding{
     display: block;
     margin: 2rem 0;
-    text-align: center;
+    text-align: left;
 }
 
 @media screen and (min-width: 40rem){
@@ -1180,7 +1184,18 @@ body.custom-background.page-template-case-study{
     margin-right: auto;
 }
 
-.tr-960w em{
+.tr-720w{
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tr-720w--left{
+	margin-left: 0;
+}
+
+.tr-960w em,
+.tr-720w em{
 	text-align: center;
 	display: block;
 }
