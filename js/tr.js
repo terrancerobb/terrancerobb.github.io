@@ -113,6 +113,18 @@
             line_linked: { enable: false, distance: 200, color: "#ffffff", opacity: 1, width: 2 },
             move: { enable: true, speed: 0.25, direction: "bottom-right", random: false, straight: false, out_mode: "out", bounce: false, attract: { enable: false, rotateX: 600, rotateY: 1200 } },
         },
+				"interactivity": {
+			    "detect_on": "canvas",
+			    "events": {
+			      "onhover": {
+			        "enable": false,
+			      },
+			      "onclick": {
+			        "enable": false,
+			      },
+			      "resize": true
+			    },
+			  },
         retina_detect: true,
     });
   } else {
@@ -126,6 +138,18 @@
           line_linked: { enable: false, distance: 200, color: "#ffffff", opacity: 1, width: 2 },
           move: { enable: true, speed: 0.25, direction: "none", random: false, straight: false, out_mode: "out", bounce: false, attract: { enable: false, rotateX: 600, rotateY: 1200 } },
       },
+			"interactivity": {
+				"detect_on": "canvas",
+				"events": {
+					"onhover": {
+						"enable": false,
+					},
+					"onclick": {
+						"enable": false,
+					},
+					"resize": true
+				},
+			},
       retina_detect: true,
   });
   }
