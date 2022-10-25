@@ -397,7 +397,7 @@ select,
 optgroup,
 textarea {
 	color: #2d3233;
-	font-family: 'Lato', sans-serif;
+	font-family: 'Poppins', sans-serif;
 	font-size: 16px;
 	font-size: 1rem;
 	line-height: 1.5;
@@ -408,12 +408,19 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1{
-	font-size: 2rem;
+	font-size: 1.5rem;
+	font-weight: normal;
+}
+
+@media screen and (min-width: 40rem){
+	h1{
+		font-size: 2rem;
+	}
 }
 
 @media screen and (min-width: 60rem){
 	h1{
-		font-size: 3rem;
+		font-size: 2.5rem;
 	}
 }
 
@@ -458,7 +465,6 @@ blockquote {
 	margin: 0 1.5em;
 	border-left: solid 4px #fa726e;
     padding-left: 1rem;
-    font-family: 'Playfair Display', serif;
     font-style: italic;
 }
 
@@ -513,10 +519,10 @@ html {
 }
 
 body {
-	background: #fff;
+	background: #001122;
 	/* Fallback for when there is no custom background color defined. */
 
-	font-family: 'Lato', sans-serif;
+	font-family: 'Poppins', sans-serif;
 	font-weight: 400;
     overscroll-behavior: none;
 }
@@ -665,10 +671,8 @@ textarea {
 ## Links
 --------------------------------------------------------------*/
 a {
-    color: #2d3233;
-    font-family: 'Playfair Display', serif;
-	font-weight: 700;
-	font-style: italic;
+  color: #2d3233;
+	font-weight: 600;
 	text-decoration: underline;
 	text-decoration-color: #fa726e;
 }
@@ -682,19 +686,19 @@ a:hover, a:active {
 }
 
 @-webkit-keyframes linkGrad {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+    0%{background-position:50% 50%}
+    50%{background-position:-50% 50%}
+    100%{background-position:50% 50%}
 }
 @-moz-keyframes linkGrad {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+		0%{background-position:50% 50%}
+		50%{background-position:-50% 50%}
+		100%{background-position:50% 50%}
 }
 @keyframes linkGrad {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+		0%{background-position:50% 50%}
+		50%{background-position:-50% 50%}
+		100%{background-position:50% 50%}
 }
 
 @-webkit-keyframes homeSlide {
@@ -702,11 +706,11 @@ a:hover, a:active {
   to{background-position: -158rem -166rem;}
 }
 @-moz-keyframes homeSlide {
-  from{background-position: -8rem -16rem;}
+	from{background-position: -8rem -16rem;}
   to{background-position: -158rem -166rem;}
 }
 @keyframes homeSlide {
-  from{background-position: -8rem -16rem;}
+	from{background-position: -8rem -16rem;}
   to{background-position: -158rem -166rem;}
 }
 
@@ -758,12 +762,12 @@ a:hover, a:active {
 
 #close-nav{
     display: block;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 1rem;
     position: absolute;
     top: 2rem;
     right: 2rem;
-    font-weight: 400;
+    font-weight: 600;
     text-decoration: none;
     color: #000;
     font-style: normal;
@@ -809,14 +813,16 @@ a:hover, a:active {
 /* ===== BEGIN ===== */
 .tr-main{
     background: #fff;
-    border-radius: 3.5rem;
-    margin: 8vh auto;
+    border-radius: 2rem;
+		box-shadow: 0 1rem 10rem rgba(0,0,0,0.15);
+    margin: 4vh auto;
     width: 100%;
-    max-width: 1280px;
+    max-width: 1100px;
     padding: 1rem 1rem 6rem;
 }
 .tr-main.tr-main--home{
-	background-image: url("/img/main/dot-grid.png");
+	/* background-image: url("/img/main/dot-grid.png"); */
+	box-shadow: 0 1rem 10rem rgba(10,12,14,0.6);
 }
 @media screen and (min-width: 60em) {
     body.tr-main{
@@ -830,15 +836,17 @@ a:hover, a:active {
 
 .tr-white-box{
     background: #fff;
-    border-radius: 3.5rem;
+    border-radius: 2rem;
     list-style-type: none;
     font-size: 2rem;
 }
-strong.bigStrong{
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-style: italic;
+strong.bigStrong em{
+    font-weight: 600;
+    font-style: normal;
+		text-align: left;
     display: block;
+		font-size: 1.5em;
+		letter-spacing: -0.075rem;
 }
 
 .tr-full-img,
@@ -875,7 +883,7 @@ strong.bigStrong{
 }
 
 .tr-skills ul{
-	margin: 1rem 0 2rem;
+	margin: 1rem 0 5rem;
 	list-style: none;
 	padding-inline-start: 0;
 }
@@ -916,20 +924,19 @@ strong.bigStrong{
 
 .tr-main--home__content p{
     margin-top: 0;
-    font-size: 2.5rem;
-    font-weight: 300;
+    font-size: 1.5rem;
     margin-bottom: 0;
 }
 
 @media screen and (min-width: 40rem){
     .tr-main--home__content p{
-        font-size: 3.5rem;
+        font-size: 2rem;
     }
 }
 
 @media screen and (min-width: 60rem){
     .tr-main--home__content p{
-        font-size: 4.5rem;
+        font-size: 2.5rem;
     }
 }
 
@@ -937,9 +944,31 @@ strong.bigStrong{
     padding: 0 2rem;
 }
 
+.home .site-header{
+	visibility: hidden;
+	height: 2rem;
+}
+
+section.playbyte__samples{
+	text-align: center;
+}
+
 figure{
-  padding: 1.5rem;
+  padding: 1rem 0;
   max-width: 100%;
+	display: inline-block;
+}
+
+@media screen and (min-width: 40rem){
+	figure{
+		padding: 1.5rem;
+		max-width: 100%;
+		display: inline-block;
+	}
+}
+
+figure.figmax{
+	display: block;
 }
 
 figure img{
@@ -957,8 +986,7 @@ figure img{
 }
 
 .tr-main__content strong.homeStrong{
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 @media screen and (min-width: 60rem){
@@ -970,7 +998,7 @@ figure img{
 .tr-main__content h3{
     font-size: 2rem;
     margin: 4rem 0 0;
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .tr-main--home__content ul, .tr-main--home__content ol{
@@ -979,11 +1007,16 @@ figure img{
   	padding-left: 0;
 }
 .tr-main--home__content li{
-    font-size: 2.5rem;
+    font-size: 2.25rem;
 }
 @media screen and (min-width: 40em){
     .tr-main--home__content ul, .tr-main--home__content ol, .tr-main--home__content li{
-        font-size: 3.5rem;
+        font-size: 3rem;
+    }
+}
+@media screen and (min-width: 60em){
+    .tr-main--home__content ul, .tr-main--home__content ol, .tr-main--home__content li{
+        font-size: 3.75rem;
     }
 }
 .tr-main--home__content li a{
@@ -991,17 +1024,26 @@ figure img{
   display: inline-block;
 }
 .tr-main--home__content ol a, .tr-main--home__content ol a:visited{
-    text-decoration-color: #4ad5ee;
+		text-decoration-color: #06ce78;
     color: #2d3233;
 }
 .tr-main--home__content ol a:hover, .tr-main--home__content ol a:active{
+    color: #06ce78;
+}
+
+.tr-main--home__content ul.tr-contact a, .tr-main--home__content ul.tr-contact a:visited{
+    text-decoration-color: #4ad5ee;
+    color: #2d3233;
+}
+.tr-main--home__content ul.tr-contact a:hover, .tr-main--home__content ul.tr-contact a:active{
     color: #4ad5ee;
 }
 
 img.roundedImage{
-    border-radius: 1.25rem;
+    border-radius: 1.75rem;
     box-shadow: 0 0.5rem 1rem rgba(49,50,51,0.075);
     border: 1px solid rgba(49,50,51,0.075);
+		max-width: 100%;
 }
 
 figcaption{
@@ -1012,34 +1054,39 @@ figcaption{
 
 .site-branding{
     display: block;
-    margin: 2rem 0;
+    margin: 2rem 0 2.5rem;
     text-align: left;
 }
 
 @media screen and (min-width: 40rem){
     .site-branding{
-      margin: 5rem auto 4rem;
+      margin: 3.5rem auto 4rem;
     }
 }
 
 .custom-logo-link svg{
   overflow: visible;
+	display: none;
 }
 
 .custom-logo-link{
   display: inline-block;
-  position: relative;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-style: normal;
-  font-weight: 900;
+  font-weight: 600;
+	text-decoration: underline;
+	text-decoration-color: #4ad5ee;
+  color: #2d3233;
+	transition: color 150ms ease-in-out;
+}
+.custom-logo-link:hover{
+	color: #4ad5ee;
 }
 .custom-logo-link p{
-  color: #fa726e;
-  position: absolute;
-  top: -20%; left: -20%;
   display: block;
-  font-size: 2rem;
-  opacity: 0;
+  font-size: 1.75rem;
+	font-weight: 600;
+	margin: 0;
 }
 
 .trobb-parallax-bg{
@@ -1052,7 +1099,7 @@ figcaption{
 }
 .page-template-home .tr-bg{
     background-color: #2d3233;
-    background-image: url('/img/main/argyle-red-blue-darkbg-1_2.5x.png');
+    background-image: url('/img/main/stars.jpg');
     background-position: -8rem -16rem;
     position: fixed;
     top: 0; right: 0; left: 0; bottom: 0;
@@ -1088,20 +1135,28 @@ hr:after{
 
 @media screen and (min-width:60em) {
   .page-template-home .tr-bg{
-    -webkit-animation: homeSlide 300s linear infinite;
-    -moz-animation: homeSlide 300s linear infinite;
-    animation: homeSlide 300s linear infinite;
+    -webkit-animation: homeSlide 600s linear infinite;
+    -moz-animation: homeSlide 600s linear infinite;
+    animation: homeSlide 600s linear infinite;
   }
+}
+body.body-playbyte{
+	background: linear-gradient(270deg, #9366FE, #080A1F, #9366FE);
+}
+body.body-everdays{
+	background: linear-gradient(270deg, #0384db, #25292e, #0384db);
+}
+body.body-rocketmortgage{
+	background: linear-gradient(270deg, #c8102e, #1c1b1a, #c8102e);
 }
 body.custom-background.page-template-case-study{
     background-color: #fa726e;
-    background: linear-gradient(270deg, #4ad5ee, #8d36fa, #fa726e);
     background-size: 1000% 1000%;
     /*6a82fb*/
 
-    -webkit-animation: linkGrad 60s linear infinite;
-    -moz-animation: linkGrad 60s linear infinite;
-    animation: linkGrad 60s linear infinite;
+    -webkit-animation: linkGrad 120s linear infinite;
+    -moz-animation: linkGrad 120s linear infinite;
+    animation: linkGrad 120s linear infinite;
 }
 .projectImage{
   width: 100%;
