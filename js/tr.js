@@ -136,7 +136,7 @@
 				opacity: { value: 0.3, random: true, anim: { enable: true, speed: 0.5, opacity_min: 0.1, sync: false } },
 				size: { value: 2, random: true, anim: { enable: false, speed: 3, size_min: 40, sync: false } },
 				line_linked: { enable: false, distance: 200, color: "#ffffff", opacity: 1, width: 2 },
-				move: { enable: true, speed: 1.2, direction: "top", random: true, straight: false, out_mode: "out", bounce: false, attract: { enable: false, rotateX: 600, rotateY: 1200 } },
+				move: { enable: true, speed: 0.75, direction: "top", random: true, straight: false, out_mode: "out", bounce: false, attract: { enable: false, rotateX: 600, rotateY: 1200 } },
       },
 			"interactivity": {
 				"detect_on": "canvas",
