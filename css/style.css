@@ -949,7 +949,7 @@ strong.bigStrong em{
 	height: 2rem;
 }
 
-section.playbyte__samples{
+section.work-samples{
 	text-align: center;
 }
 
@@ -969,6 +969,10 @@ figure{
 
 figure.figmax{
 	display: block;
+}
+
+figure.figmax figcaption{
+	display: inline-block;
 }
 
 figure img{
@@ -1041,15 +1045,20 @@ figure img{
 
 img.roundedImage{
     border-radius: 1.75rem;
-    box-shadow: 0 0.5rem 1rem rgba(49,50,51,0.075);
-    border: 1px solid rgba(49,50,51,0.075);
+    /* box-shadow: 0 0.5rem 1rem rgba(49,50,51,0.075); */
+    border: 1px solid rgba(49,50,51,0.15);
 		max-width: 100%;
 }
 
 figcaption{
-  font-size: 1.25rem;
-  font-style: italic;
-  padding: 1rem;
+  font-size: 1rem;
+  padding: 2.25rem 1.75rem;
+	font-weight: 400;
+	letter-spacing: 0.015rem;
+	background-color: #2d3233;
+	color: #fff;
+	margin: 1.5rem 1.5rem 2.5rem;
+	border-radius: 0.5rem;
 }
 
 .site-branding{
@@ -1140,18 +1149,18 @@ hr:after{
     animation: homeSlide 600s linear infinite;
   }
 }
-body.body-playbyte{
+body.body-playbyte, body.body-playbyte .bgmatch{
 	background: linear-gradient(270deg, #9366FE, #080A1F, #9366FE);
 }
-body.body-everdays{
+body.body-everdays, body.body-everdays .bgmatch{
 	background: linear-gradient(270deg, #0384db, #25292e, #0384db);
 }
-body.body-rocketmortgage{
+body.body-rocketmortgage, body.body-rocketmortgage .bgmatch{
 	background: linear-gradient(270deg, #c8102e, #1c1b1a, #c8102e);
 }
 body.custom-background.page-template-case-study{
     background-color: #fa726e;
-    background-size: 1000% 1000%;
+    background-size: 7500px 7500px;
     /*6a82fb*/
 
     -webkit-animation: linkGrad 120s linear infinite;
@@ -1259,6 +1268,7 @@ body.custom-background.page-template-case-study{
 
 .tr-720w--left{
 	margin-left: 0;
+	text-align: left;
 }
 
 .tr-960w em,

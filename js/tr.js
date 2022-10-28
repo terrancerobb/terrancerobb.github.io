@@ -34,7 +34,7 @@
     	requestAnimationFrame(animationTick);
 
     	if(dirty.resize) {
-        homeAnimation();
+        // homeAnimation();
     		dirty.resize = false;
     	}
 
