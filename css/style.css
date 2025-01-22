@@ -831,8 +831,16 @@ a:hover, a:active {
 }
 
 .tr-main--case-study section{
-	margin-bottom: 4rem;
+    margin-top: 2rem;
+	margin-bottom: 2rem;
 }
+@media screen and (min-width: 60em) {
+    .tr-main--case-study section{
+        margin-top: 0;
+        margin-bottom: 4rem;
+    }
+}
+
 
 .tr-white-box{
     background: #fff;
@@ -918,6 +926,10 @@ strong.bigStrong em{
 
 .tr-skills li.empathy{
 	background-color: #2364ef;
+}
+
+.tr-skills li.analytics{
+	background-color: #d13b90;
 }
 
 .tr-skills strong{
@@ -1059,7 +1071,7 @@ figure img{
 }
 
 img.roundedImage{
-    border-radius: 1.75rem;
+    border-radius: 1.15rem;
     /* box-shadow: 0 0.5rem 1rem rgba(49,50,51,0.075); */
     border: 1px solid rgba(49,50,51,0.15);
 		max-width: 100%;
@@ -1147,7 +1159,7 @@ hr:after{
 
 @media screen and (min-width:60em) {
   hr:after{
-    margin: 3.5rem 5rem;
+    margin: 4rem 5rem;
     font-size: 1em;
   }
 }
@@ -1160,6 +1172,9 @@ hr:after{
     -moz-animation: homeSlide 600s linear infinite;
     animation: homeSlide 600s linear infinite;
   }
+}
+body.body-robo, body.body-robo .bgmatch{
+	background: linear-gradient(270deg, #4285f4, #080A1F, #4285f4);
 }
 body.body-playbyte, body.body-playbyte .bgmatch{
 	background: linear-gradient(270deg, #9366FE, #080A1F, #9366FE);
