@@ -414,13 +414,13 @@ h1{
 
 @media screen and (min-width: 40rem){
 	h1{
-		font-size: 2rem;
+		font-size: 1.75rem;
 	}
 }
 
 @media screen and (min-width: 60rem){
 	h1{
-		font-size: 2.5rem;
+		font-size: 2rem;
 	}
 }
 
@@ -447,7 +447,7 @@ p {
 }
 p, ul, ol, li{
     font-size: 1.25rem;
-	line-height: 1.5;
+	line-height: 1.65;
 	font-weight: 400;
 	letter-spacing: 0.02rem;
 }
@@ -878,12 +878,24 @@ strong.bigStrong em{
     }
 }
 
+.tr-main--case-study article{
+    margin: 2.5rem auto;
+}
+
+.tr-main--case-study ul{
+    margin: 0;
+}
+
+.tr-main--case-study ul li{
+    margin: 0.5rem 0;
+}
+
 .tr-skills, .tr-skills ul{
 	font-size: 1rem;
 }
 
 .tr-skills ul{
-	margin: 1rem 0 5rem;
+	margin: 1rem 0 3.5rem;
 	list-style: none;
 	padding-inline-start: 0;
 }
@@ -953,6 +965,10 @@ section.work-samples{
 	text-align: center;
 }
 
+.text-center{
+    text-align: center;
+}
+
 figure{
   padding: 1rem 0;
   max-width: 100%;
@@ -1000,9 +1016,8 @@ figure img{
 }
 
 .tr-main__content h3{
-    font-size: 2rem;
-    margin: 4rem 0 0;
-    font-weight: 400;
+    font-size: 1.5rem;
+    margin: 2rem 0 0;
 }
 
 .tr-main--home__content ul, .tr-main--home__content ol{
@@ -1052,13 +1067,10 @@ img.roundedImage{
 
 figcaption{
   font-size: 1rem;
-  padding: 2.25rem 1.75rem;
+  padding: 0.75rem 1.75rem 1rem;
 	font-weight: 400;
 	letter-spacing: 0.015rem;
-	background-color: #2d3233;
-	color: #fff;
-	margin: 1.5rem 1.5rem 2.5rem;
-	border-radius: 0.5rem;
+	margin: 0.5rem 1.5rem 2.5rem;
 }
 
 .site-branding{
@@ -1120,7 +1132,7 @@ figcaption{
 hr{
   background-color: transparent;
   height: auto;
-  color: #fa726e;
+  color: #2d3233;
   margin: 0;
 }
 hr:after{
@@ -1128,15 +1140,15 @@ hr:after{
   display: block;
   text-align: center;
   letter-spacing: 2rem;
-  margin: 4rem;
-  font-size: 0.5rem;
+  margin: 2rem;
+  font-size: 0.5em;
   line-height: 1rem;
 }
 
 @media screen and (min-width:60em) {
   hr:after{
-    margin: 5rem;
-    font-size: 1rem;
+    margin: 3.5rem 5rem;
+    font-size: 1em;
   }
 }
 
