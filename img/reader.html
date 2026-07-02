@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Focus — Folio (sample)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Cinzel:wght@500;600&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#070708; --bg:#0f0b07; --page:#1b1410; --page-edge:#2c2118;
+  --ink:#efe6d9; --ink-soft:#b0a48f; --ink-faint:#83786a;
+  --accent:#f0881f;             /* ember */
+  --accent-deep:#bf5e1c;        /* deep ember */
+  --accent2:#6f9cb8;            /* cool steel-blue / crystalline */
+  --frost:#6f9cb8;              /* alias for rider */
+  --steel:#6f9cb8;              /* alias for Architect rule */
+  --display:'IM Fell English',Georgia,serif;
+  --display-sc:'IM Fell English SC',Georgia,serif;
+  --body:'Space Grotesk',system-ui,sans-serif;
+  --serif:'Space Grotesk',system-ui,sans-serif;  /* map old --serif usages */
+  --mono:'Space Mono',monospace;
+  --reading:1.0625rem; /* 17px base; JS size control still works */
+  --measure:36em;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:radial-gradient(130% 90% at 50% -10%,#1e1208 0%,var(--void) 70%);
+  color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;overflow:hidden;
+  /* dvh tracks the real visible viewport on mobile (URL bar show/hide) */
+  height:100dvh}
+/* faint grain over everything */
+body::before{content:'';position:fixed;inset:0;z-index:40;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+
+.reader{position:relative;height:100%;display:flex;flex-direction:column;max-width:760px;margin:0 auto;padding:0 1.2rem}
+
+/* ---- Top chrome ---- */
+.r-top{display:flex;align-items:center;gap:.8rem;padding:1.1rem .2rem .4rem;flex:none}
+.mark{width:26px;height:26px;flex:none;color:var(--accent);animation:spin 46s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.chapter{font-family:var(--mono);font-weight:400;letter-spacing:.18em;font-size:.74rem;
+  text-transform:uppercase;color:var(--ink-soft)}
+.chapter b{color:var(--accent);font-weight:700;margin-right:.5em}
+.r-top-sp{flex:1}
+.ribbon{position:relative;width:24px;height:40px;cursor:pointer;color:var(--ink-faint);
+  transition:color .2s,transform .2s,filter .2s}
+.ribbon:hover{color:var(--accent);transform:translateY(2px)}
+.ribbon.on{color:var(--accent);filter:drop-shadow(0 0 6px rgba(240,136,31,.55))}
+/* a ribbon is planted on another page: half-lit, inviting the return-jump */
+.ribbon.away{color:var(--accent-deep);opacity:.75}
+.ribbon:focus-visible{outline:none;color:var(--accent);
+  filter:drop-shadow(0 0 0 transparent) drop-shadow(0 0 5px rgba(240,136,31,.6))}
+.ribbon svg{width:100%;height:100%}
+
+/* ---- The page / stage ---- */
+.stage{flex:1;position:relative;min-height:0;display:flex;align-items:stretch;padding:.4rem 0 .2rem}
+.book{position:relative;flex:1;background:linear-gradient(180deg,var(--page),#120d09);
+  border:1px solid var(--page-edge);border-radius:10px;
+  box-shadow:0 30px 70px -30px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.03);
+  overflow:hidden}
+/* in-world top hairline — warm ember */
+.book::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;z-index:2;
+  background:linear-gradient(90deg,transparent,rgba(240,136,31,.5),transparent)}
+.book::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:10px;
+  box-shadow:inset 0 0 150px -50px rgba(0,0,0,.95)}
+.page-scroll{position:absolute;inset:0;overflow-y:auto;display:flex;flex-direction:column;
+  padding:clamp(1.4rem,4vw,2.8rem) clamp(1.3rem,5vw,3rem)}
+.page-scroll::-webkit-scrollbar{width:8px}
+.page-scroll::-webkit-scrollbar-thumb{background:var(--page-edge);border-radius:8px}
+
+/* vertically centred; auto margins collapse (top-align) when a page overflows */
+/* font-size = the reading size, so all em-based voices/quotes scale with A-/A+ too */
+.page{display:none;width:100%;max-width:var(--measure);margin-inline:auto;font-size:var(--reading)}
+.page.active{display:block;margin-block:auto}
+.folio{font-family:var(--mono);font-size:.62rem;letter-spacing:.22em;color:var(--ink-faint);
+  text-transform:uppercase;margin:0 0 1.6rem;display:flex;gap:.6rem;align-items:center}
+.folio::after{content:'';flex:1;height:1px;background:var(--page-edge)}
+
+/* ---- Prose + voices ---- */
+/* Narration: Space Grotesk, upright, 17px equivalent, generous leading */
+.narr{font-family:var(--body);font-style:normal;font-size:var(--reading);line-height:1.62;
+  color:var(--ink);margin:0 0 1.25em;letter-spacing:.005em;text-wrap:pretty}
+/* Drop cap: IM Fell English for the display initial */
+.narr.drop:first-letter{font-family:var(--display);font-size:3.1em;float:left;line-height:.8;
+  padding:.04em .12em 0 0;color:var(--accent)}
+
+.reveal{opacity:0}
+.page.active .reveal{animation:rise .7s cubic-bezier(.2,.7,.3,1) both;animation-delay:calc(var(--i,0)*140ms)}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+/* a page you've already read this session snaps in — the rise plays once */
+.page.seen .reveal,.page.active.seen .reveal{animation:none;opacity:1}
+.page.active.seen .v-rider{animation:none;opacity:1;filter:none;letter-spacing:.05em}
+
+/* Cecilia — interior thought: warm ember, light italic — a voice that breathes */
+.v-cecilia{margin:1.4em 0;padding:.2em 0 .2em 1.15em;
+  border-left:2px solid rgba(240,136,31,.55);
+  font-family:var(--body);font-style:italic;font-weight:300;font-size:1.12em;line-height:1.7;
+  color:#f2c68a;
+  text-shadow:0 0 22px rgba(240,136,31,.22)}
+.v-cecilia .who{display:block;font-style:normal;font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(240,136,31,.7);margin-bottom:.45em}
+/* emphasis: the word glows warmer and breathes — feeling, not volume */
+.v-cecilia em{font-style:inherit;font-weight:500;color:#ffd9a0;
+  animation:v-breathe 2.6s ease-in-out infinite alternate}
+@keyframes v-breathe{from{text-shadow:0 0 10px rgba(240,136,31,.25)}
+  to{text-shadow:0 0 18px rgba(240,136,31,.6)}}
+/* thought channel = bracketed text (the trifurcation rule) — no 'she thinks' label */
+.v-cecilia .v-body::before{content:'[';color:rgba(240,136,31,.55);margin-right:.08em}
+.v-cecilia .v-body::after{content:']';color:rgba(240,136,31,.55);margin-left:.08em}
+
+/* The Architect — cold authoritative slab; engraved imperial face (Cinzel) */
+.v-architect{margin:1.6em 0;padding:1.05em 1.25em 1.15em;
+  color:#cdd8e0;font-family:'Cinzel',var(--display),serif;font-weight:500;font-style:normal;
+  font-size:.98em;line-height:1.75;letter-spacing:.03em;
+  background:linear-gradient(180deg,#131820,#0e1318);
+  border:1px solid #1e2d3a;border-left:3px solid var(--accent2);
+  border-radius:3px;box-shadow:0 16px 40px -18px rgba(0,0,0,.9)}
+.v-architect .who{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--accent2);margin-bottom:.6em}
+/* emphasis: authority never animates — weight, cold light, and space instead */
+.v-architect em{font-style:normal;font-weight:600;color:#eaf3f9;letter-spacing:.07em;
+  text-shadow:0 0 12px rgba(111,156,184,.5)}
+
+/* The rider (C2) — crystalline, faceted, shimmering. Cool steel-blue (#6f9cb8). Name withheld. */
+.v-rider{position:relative;margin:1.7em 0;padding:1.1em 1.3em;color:#d6edf7;
+  font-family:var(--display);font-weight:400;font-style:normal;font-size:1.12em;line-height:1.55;letter-spacing:.05em;
+  background:linear-gradient(135deg,rgba(111,156,184,.12),rgba(111,156,184,.02));
+  border:1px solid rgba(111,156,184,.5);
+  clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);
+  box-shadow:0 0 30px -8px rgba(111,156,184,.45),inset 0 0 22px -12px rgba(111,156,184,.7);
+  text-shadow:0 0 14px rgba(111,156,184,.55)}
+.v-rider::after{content:'';position:absolute;inset:0;clip-path:inherit;pointer-events:none;
+  background:linear-gradient(110deg,transparent 32%,rgba(190,225,240,.22) 50%,transparent 68%);
+  background-size:260% 100%;animation:shimmer 5s linear infinite}
+@keyframes shimmer{to{background-position:-160% 0}}
+.v-rider .who{display:block;font-family:var(--mono);font-weight:400;font-size:.58rem;letter-spacing:.3em;
+  text-transform:uppercase;color:rgba(111,156,184,.7);margin-bottom:.5em}
+/* emphasis: facets — each letter catches the light in turn (letters split by JS) */
+.v-rider em{font-style:normal;color:#eef9ff}
+.v-rider em .gl{display:inline-block;animation:v-glint 1.5s ease-in-out infinite;
+  animation-delay:calc(var(--li,0)*60ms)}
+@keyframes v-glint{0%,74%,100%{text-shadow:0 0 14px rgba(111,156,184,.55)}
+  84%{text-shadow:0 0 6px rgba(210,240,255,.95),0 0 24px rgba(111,156,184,.85);transform:translateY(-1.5px)}}
+
+/* voices evolve with the story: after the turn, the crystal warms toward ember
+   and the facets knit smaller — era variants are part of the storytelling */
+.v-rider.era-late{color:#f2e3d4;border-color:rgba(240,170,110,.55);
+  background:linear-gradient(135deg,rgba(240,150,80,.1),rgba(111,156,184,.04));
+  clip-path:polygon(5px 0,calc(100% - 5px) 0,100% 5px,100% calc(100% - 5px),calc(100% - 5px) 100%,5px 100%,0 calc(100% - 5px),0 5px);
+  box-shadow:0 0 30px -8px rgba(240,150,90,.4),inset 0 0 22px -12px rgba(240,170,110,.6);
+  text-shadow:0 0 14px rgba(240,160,90,.45)}
+.v-rider.era-late .who{color:rgba(240,170,110,.75)}
+.v-rider.era-late::after{animation-duration:9s;
+  background:linear-gradient(110deg,transparent 32%,rgba(250,220,180,.18) 50%,transparent 68%);background-size:260% 100%}
+.v-rider.era-late em .gl{animation-name:v-glint-late}
+@keyframes v-glint-late{0%,74%,100%{text-shadow:0 0 14px rgba(240,160,90,.5)}
+  84%{text-shadow:0 0 6px rgba(255,235,205,.95),0 0 24px rgba(240,160,90,.8);transform:translateY(-1.5px)}}
+.page.active .v-rider{animation:assemble .9s ease both;animation-delay:calc(var(--i,0)*140ms)}
+@keyframes assemble{0%{opacity:0;letter-spacing:.4em;filter:blur(6px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;letter-spacing:.05em}}
+
+/* Interstitial Voice — a record on a screen: cold bezel, scanlines, drifting band, cursor */
+.v-interstitial{position:relative;margin:1.7em 0;padding:1em 1.15em;
+  font-family:var(--mono);font-size:.8em;line-height:1.65;
+  color:#b9c8cf;background:linear-gradient(180deg,#10161b,#0b1013);
+  border:1px solid #1e2d3a;border-radius:6px;
+  box-shadow:inset 0 0 30px -12px rgba(111,156,184,.35),0 10px 30px -18px rgba(0,0,0,.8)}
+.v-interstitial::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:6px;
+  background:repeating-linear-gradient(0deg,rgba(214,237,247,.05) 0 1px,transparent 1px 3px),
+    linear-gradient(180deg,transparent 0%,rgba(214,237,247,.08) 50%,transparent 100%);
+  background-size:auto,100% 220%;background-position:0 0,0 -60%;
+  animation:crt-band 7s linear infinite}
+@keyframes crt-band{to{background-position:0 0,0 160%}}
+.v-interstitial .v-body::after{content:'\258C';margin-left:.15em;color:rgba(111,156,184,.8);
+  animation:crt-blink 1.1s steps(1) infinite}
+@keyframes crt-blink{50%{opacity:0}}
+.v-interstitial::before{content:'INTERSTITIAL';position:absolute;top:-.62em;left:.9em;
+  background:var(--page);padding:0 .45em;font-size:.55rem;letter-spacing:.24em;color:var(--ink-faint)}
+/* emphasis: a record asserting itself — bold mono, one settling flicker, then steady */
+.v-interstitial em{font-style:normal;font-weight:700;color:var(--ink)}
+.page.active:not(.seen) .v-interstitial em{animation:v-flicker .9s steps(1,end) 1 both;
+  animation-delay:calc(var(--i,0)*140ms + .4s)}
+@keyframes v-flicker{0%{opacity:.15}18%{opacity:1}30%{opacity:.4}42%{opacity:1}
+  55%{opacity:.7}68%{opacity:1}100%{opacity:1}}
+
+/* ---- Bottom chrome ---- */
+.r-bottom{flex:none;padding:.6rem .2rem 1rem}
+.progress{height:2px;background:var(--page-edge);border-radius:2px;overflow:hidden;margin-bottom:.7rem}
+.progress span{display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--accent),#f4b560);
+  transition:width .5s cubic-bezier(.2,.7,.3,1)}
+.controls{display:flex;align-items:center;gap:.8rem}
+.nav{display:inline-flex;align-items:center;gap:.5rem;background:none;border:1px solid var(--page-edge);
+  border-radius:8px;color:var(--ink-soft);font-family:var(--mono);font-weight:400;font-size:.72rem;
+  letter-spacing:.12em;text-transform:uppercase;padding:.55rem .9rem;cursor:pointer;
+  transition:border-color .16s,color .16s,box-shadow .16s}
+.nav:hover:not(:disabled){border-color:var(--accent);color:var(--ink);
+  box-shadow:0 0 10px -3px rgba(240,136,31,.35)}
+.nav:focus-visible{outline:none;border-color:var(--accent);
+  box-shadow:0 0 0 2px rgba(240,136,31,.4)}
+.nav:disabled{opacity:.32;cursor:default}
+.nav svg{width:15px;height:15px}
+.indicator{flex:1;text-align:center;font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;color:var(--ink-faint)}
+.indicator b{color:var(--ink);font-weight:700}
+.tools{display:inline-flex;gap:.35rem;align-items:center}
+.tool{width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;
+  background:none;border:1px solid var(--page-edge);border-radius:7px;color:var(--ink-faint);cursor:pointer;
+  font-family:var(--body);font-weight:500;transition:border-color .16s,color .16s,box-shadow .16s}
+.tool:hover{border-color:var(--accent);color:var(--ink);
+  box-shadow:0 0 8px -2px rgba(240,136,31,.3)}
+.tool:focus-visible{outline:none;border-color:var(--accent);
+  box-shadow:0 0 0 2px rgba(240,136,31,.4)}
+.tool.sm{font-size:.7rem}.tool.lg{font-size:.95rem}
+
+/* ---- The hush: ANY block can arrive fully concealed behind a neutral
+   placeholder that betrays nothing — not the voice, not the speaker, not the
+   length. A pending hush also gates everything after it on the page, so each
+   reveal reads on to the next one — the reader paces the page themselves. ---- */
+.gate-hidden{display:none!important}
+.hush-ph{display:flex;width:100%;align-items:center;justify-content:center;gap:.7em;
+  margin:1.6em 0;min-height:4em;padding:1.15em 1em;background:rgba(240,136,31,.035);
+  border:1px solid rgba(240,136,31,.35);border-radius:8px;cursor:pointer;
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--accent);transition:border-color .16s,color .16s,background .16s;
+  animation:ph-breathe 2.6s ease-in-out infinite alternate}
+.hush-ph::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 8px rgba(240,136,31,.8)}
+.hush-ph:hover,.hush-ph:focus-visible{border-color:var(--accent);background:rgba(240,136,31,.07);
+  color:#ffc888;outline:none}
+@keyframes ph-breathe{from{box-shadow:0 0 14px -8px rgba(240,136,31,.25)}
+  to{box-shadow:0 0 20px -6px rgba(240,136,31,.6)}}
+/* words stay whole inside letter-split emphasis (no mid-word breaks) */
+.glw{white-space:nowrap}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:5.2rem;transform:translateX(-50%) translateY(10px);
+  background:var(--page);border:1px solid var(--page-edge);border-radius:8px;padding:.5rem .9rem;
+  font-family:var(--mono);font-size:.72rem;color:var(--ink-soft);opacity:0;pointer-events:none;
+  transition:opacity .25s,transform .25s;z-index:50}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (prefers-reduced-motion:reduce){
+  .mark{animation:none}
+  .page.active .reveal,.page.active .v-rider{animation:none;opacity:1;filter:none;letter-spacing:.05em}
+  .v-rider::after{animation:none}
+  .reveal{opacity:1}
+  .v-cecilia em,.v-rider em .gl,.page.active:not(.seen) .v-interstitial em{animation:none;opacity:1;transform:none}
+  .v-interstitial::after,.v-interstitial .v-body::after{animation:none}
+  .v-body{transition:none}
+  .hush-ph{animation:none}
+}
+@media (max-width:560px){
+  .nav span.lbl{display:none}
+  :root{--reading:.97rem}
+}
+@media (pointer:coarse){
+  .tool{width:40px;height:40px}
+  .nav{padding:.7rem 1rem}
+  .ribbon{width:28px;height:46px}
+}
+</style>
+</head>
+<body>
+<div class="reader">
+
+  <header class="r-top">
+    <!-- Tucked-aperture brand mark; inherits colour via currentColor; coloured via .mark{color:var(--accent)} -->
+    <svg class="mark ap" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="50" cy="50" r="40"/><path d="M50.00 38.50L51.64 38.26L53.21 38.22L54.69 38.34L56.08 38.59L57.38 38.96L58.59 39.41L59.72 39.93L60.77 40.51L61.74 41.14L62.64 41.81L63.48 42.51L64.25 43.24L64.97 43.98L65.63 44.74L66.24 45.52L66.80 46.30L67.31 47.09L67.79 47.89L68.22 48.69L68.62 49.49L68.98 50.30L69.31 51.11L69.60 51.91L69.87 52.72L70.10 53.52L70.31 54.32L70.49 55.12L70.64 55.92L70.77 56.72L70.88 57.51L70.96 58.30L71.02 59.09L71.06 59.87L71.07 60.66L71.07 61.43L71.04 62.21L70.99 62.98L70.92 63.75L70.83 64.52L70.72 65.28L70.59 66.04L70.44 66.80L70.27 67.56L70.08 68.31L69.87 69.05L69.64 69.80L69.39 70.54L69.11 71.28L68.82 72.01L68.50 72.74L68.16 73.46L67.80 74.18L67.41 74.90L67.00 75.61L66.57 76.31L66.11 77.01L65.62 77.71L65.11 78.39L64.57 79.07L63.99 79.75L63.39 80.41L62.76 81.07L62.10 81.71L61.40 82.35L60.66 82.97L59.89 83.59L59.08 84.18L58.23 84.76L57.33 85.33L56.38 85.87L55.39 86.40L54.34 86.90L53.24 87.37L52.07 87.81L50.84 88.21L49.54 88.57L48.16 88.89L46.70 89.15L45.15 89.35L43.49 89.47"/><path d="M61.50 50.00L61.74 51.64L61.78 53.21L61.66 54.69L61.41 56.08L61.04 57.38L60.59 58.59L60.07 59.72L59.49 60.77L58.86 61.74L58.19 62.64L57.49 63.48L56.76 64.25L56.02 64.97L55.26 65.63L54.48 66.24L53.70 66.80L52.91 67.31L52.11 67.79L51.31 68.22L50.51 68.62L49.70 68.98L48.89 69.31L48.09 69.60L47.28 69.87L46.48 70.10L45.68 70.31L44.88 70.49L44.08 70.64L43.28 70.77L42.49 70.88L41.70 70.96L40.91 71.02L40.13 71.06L39.34 71.07L38.57 71.07L37.79 71.04L37.02 70.99L36.25 70.92L35.48 70.83L34.72 70.72L33.96 70.59L33.20 70.44L32.44 70.27L31.69 70.08L30.95 69.87L30.20 69.64L29.46 69.39L28.72 69.11L27.99 68.82L27.26 68.50L26.54 68.16L25.82 67.80L25.10 67.41L24.39 67.00L23.69 66.57L22.99 66.11L22.29 65.62L21.61 65.11L20.93 64.57L20.25 63.99L19.59 63.39L18.93 62.76L18.29 62.10L17.65 61.40L17.03 60.66L16.41 59.89L15.82 59.08L15.24 58.23L14.67 57.33L14.13 56.38L13.60 55.39L13.10 54.34L12.63 53.24L12.19 52.07L11.79 50.84L11.43 49.54L11.11 48.16L10.85 46.70L10.65 45.15L10.53 43.49"/><path d="M50.00 61.50L48.36 61.74L46.79 61.78L45.31 61.66L43.92 61.41L42.62 61.04L41.41 60.59L40.28 60.07L39.23 59.49L38.26 58.86L37.36 58.19L36.52 57.49L35.75 56.76L35.03 56.02L34.37 55.26L33.76 54.48L33.20 53.70L32.69 52.91L32.21 52.11L31.78 51.31L31.38 50.51L31.02 49.70L30.69 48.89L30.40 48.09L30.13 47.28L29.90 46.48L29.69 45.68L29.51 44.88L29.36 44.08L29.23 43.28L29.12 42.49L29.04 41.70L28.98 40.91L28.94 40.13L28.93 39.34L28.93 38.57L28.96 37.79L29.01 37.02L29.08 36.25L29.17 35.48L29.28 34.72L29.41 33.96L29.56 33.20L29.73 32.44L29.92 31.69L30.13 30.95L30.36 30.20L30.61 29.46L30.89 28.72L31.18 27.99L31.50 27.26L31.84 26.54L32.20 25.82L32.59 25.10L33.00 24.39L33.43 23.69L33.89 22.99L34.38 22.29L34.89 21.61L35.43 20.93L36.01 20.25L36.61 19.59L37.24 18.93L37.90 18.29L38.60 17.65L39.34 17.03L40.11 16.41L40.92 15.82L41.77 15.24L42.67 14.67L43.62 14.13L44.61 13.60L45.66 13.10L46.76 12.63L47.93 12.19L49.16 11.79L50.46 11.43L51.84 11.11L53.30 10.85L54.85 10.65L56.51 10.53"/><path d="M38.50 50.00L38.26 48.36L38.22 46.79L38.34 45.31L38.59 43.92L38.96 42.62L39.41 41.41L39.93 40.28L40.51 39.23L41.14 38.26L41.81 37.36L42.51 36.52L43.24 35.75L43.98 35.03L44.74 34.37L45.52 33.76L46.30 33.20L47.09 32.69L47.89 32.21L48.69 31.78L49.49 31.38L50.30 31.02L51.11 30.69L51.91 30.40L52.72 30.13L53.52 29.90L54.32 29.69L55.12 29.51L55.92 29.36L56.72 29.23L57.51 29.12L58.30 29.04L59.09 28.98L59.87 28.94L60.66 28.93L61.43 28.93L62.21 28.96L62.98 29.01L63.75 29.08L64.52 29.17L65.28 29.28L66.04 29.41L66.80 29.56L67.56 29.73L68.31 29.92L69.05 30.13L69.80 30.36L70.54 30.61L71.28 30.89L72.01 31.18L72.74 31.50L73.46 31.84L74.18 32.20L74.90 32.59L75.61 33.00L76.31 33.43L77.01 33.89L77.71 34.38L78.39 34.89L79.07 35.43L79.75 36.01L80.41 36.61L81.07 37.24L81.71 37.90L82.35 38.60L82.97 39.34L83.59 40.11L84.18 40.92L84.76 41.77L85.33 42.67L85.87 43.62L86.40 44.61L86.90 45.66L87.37 46.76L87.81 47.93L88.21 49.16L88.57 50.46L88.89 51.84L89.15 53.30L89.35 54.85L89.47 56.51"/><circle cx="50" cy="50" r="13.5" fill="currentColor" stroke="none"/></svg>
+    <div class="chapter"><b>I</b> A Sample Chapter</div>
+    <div class="r-top-sp"></div>
+    <div class="ribbon" id="ribbon" title="Bookmark this page" role="button" tabindex="0"
+         aria-label="Bookmark this page" aria-pressed="false">
+      <svg viewBox="0 0 24 40" fill="currentColor" aria-hidden="true"><path d="M2 1h20v37l-10-7-10 7z"/></svg>
+    </div>
+  </header>
+
+  <main class="stage">
+    <article class="book"><div class="page-scroll" id="scroll">
+
+      <section class="page active" data-page="0">
+        <p class="folio">Folio I · i</p>
+        <p class="narr drop reveal" style="--i:0">The morning came in pale and uncommitted, the way mornings do when no one is watching them arrive. Below the window the street went about its small business — a cart, a closed door, a lamp left burning past its use.</p>
+        <p class="narr reveal" style="--i:1">She had not meant to stop here. People rarely do. But the hour was thin and the road was long, and somewhere a bell was counting something out.</p>
+        <p class="narr reveal" style="--i:2">A figure waited at the corner, patient as weather.</p>
+      </section>
+
+      <section class="page" data-page="1">
+        <p class="folio">Folio I · ii</p>
+        <p class="narr reveal" style="--i:0">She did not know why she had stopped. People did not stop on this street; stopping was how a place learned your face.</p>
+        <div class="v-cecilia reveal hush" style="--i:1">I should keep walking. I don't know this place. So why does the corner feel like <em>a question left open?</em></div>
+        <p class="narr reveal" style="--i:2">Beneath the thought, quieter, came a second feeling she could not name — not fear exactly, but its near relation, the one that arrives early and stays too long.</p>
+        <p class="narr reveal" style="--i:3">The figure did not move. The lamp did not gutter. Somewhere, patiently, the bell kept its count.</p>
+      </section>
+
+      <section class="page" data-page="2">
+        <p class="folio">Folio I · iii</p>
+        <p class="narr reveal hush" style="--i:0">The stranger lowered the hood, and did not hurry.</p>
+        <div class="v-rider reveal hush" style="--i:1"><span class="who">— ?</span>"Stay a moment. This is the part <em>worth remembering</em>."</div>
+        <p class="narr reveal" style="--i:2">From the doorway came another voice, older, dry as paper folded too many times.</p>
+        <div class="v-architect reveal hush" style="--i:3"><span class="who">The Keeper</span>"Everything here was made to be looked at. Stand where you are, and <em>look</em>."</div>
+        <p class="narr reveal" style="--i:4">The bell finished its count. Whatever it had been counting was finished too.</p>
+      </section>
+
+      <section class="page" data-page="3">
+        <p class="folio">Folio I · iv</p>
+        <div class="v-interstitial reveal" style="--i:0">A note for the margins: none of this is <em>the real story</em>. The names are borrowed, the scene invented — a stand-in, so the shape of the thing can be shown without giving the thing away.</div>
+        <p class="narr reveal" style="--i:1">She stayed, because staying was easier than the alternative, and watched a stranger she did not know begin to say something she did not yet understand.</p>
+        <p class="narr reveal" style="--i:2">Above the street, the morning went on arriving — pale, patient, in no particular hurry.</p>
+        <div class="v-rider era-late reveal hush" style="--i:3"><span class="who">— ? · after the turn</span>"You already know how this part goes. You were <em>always going to stay</em>."</div>
+        <p class="narr reveal" style="--i:4">And that, for now, is all there is to show.</p>
+      </section>
+
+    </div></article>
+  </main>
+
+  <footer class="r-bottom">
+    <div class="progress"><span id="bar"></span></div>
+    <div class="controls">
+      <button class="nav" id="prev" aria-label="Previous page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span class="lbl">Prev</span></button>
+      <div class="indicator"><b id="cur">1</b> / <span id="tot">4</span></div>
+      <div class="tools">
+        <button class="tool sm" id="dec" title="Smaller text" aria-label="Smaller text">A</button>
+        <button class="tool lg" id="inc" title="Larger text" aria-label="Larger text">A</button>
+      </div>
+      <button class="nav" id="next" aria-label="Next page"><span class="lbl">Next</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var pages=[].slice.call(document.querySelectorAll('.page'));
+  var scroll=document.getElementById('scroll');
+  var bar=document.getElementById('bar'),cur=document.getElementById('cur'),tot=document.getElementById('tot');
+  var prev=document.getElementById('prev'),next=document.getElementById('next');
+  var ribbon=document.getElementById('ribbon'),toast=document.getElementById('toast');
+  var KEY='ng-folio';
+  var idx=0,markedPage=null;
+  tot.textContent=pages.length;
+
+  // markedPage is the single source of truth — never derive it from the DOM.
+  function save(){try{localStorage.setItem(KEY,JSON.stringify({page:idx,mark:markedPage,sizeIdx:sizeIdx}));}catch(e){}}
+  function flash(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(flash._t);flash._t=setTimeout(function(){toast.classList.remove('show');},1600);}
+
+  function ribbonState(){
+    var on=markedPage===idx,away=markedPage!==null&&!on;
+    ribbon.classList.toggle('on',on);
+    ribbon.classList.toggle('away',away);
+    ribbon.setAttribute('aria-pressed',on?'true':'false');
+    var t=on?'Remove bookmark':(away?'Return to your ribbon (page '+(markedPage+1)+')':'Bookmark this page');
+    ribbon.title=t;ribbon.setAttribute('aria-label',t);
+  }
+  function show(n){
+    n=Math.max(0,Math.min(pages.length-1,n));
+    pages.forEach(function(p,i){
+      if(i===n){
+        // the rise cascade plays on the FIRST visit only; revisits snap in
+        p.classList.toggle('seen',!!p.dataset.seen);
+        p.dataset.seen='1';
+        p.classList.add('active');
+      }else p.classList.remove('active');
+    });
+    idx=n;cur.textContent=idx+1;
+    bar.style.width=(pages.length>1?(idx/(pages.length-1)*100):100)+'%';
+    prev.disabled=idx===0;next.disabled=idx===pages.length-1;
+    scroll.scrollTop=0;
+    ribbonState();
+    save();
+  }
+  prev.addEventListener('click',function(){show(idx-1);});
+  next.addEventListener('click',function(){show(idx+1);});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight')show(idx+1);
+    else if(e.key==='ArrowLeft')show(idx-1);
+    else if(e.key==='Home')show(0);
+    else if(e.key==='End')show(pages.length-1);
+  });
+
+  // --- swipe paging (axis-locked; a vertical scroll never turns the page) ---
+  var tx=null,ty=null;
+  scroll.addEventListener('touchstart',function(e){
+    if(e.touches.length!==1)return;
+    tx=e.touches[0].clientX;ty=e.touches[0].clientY;
+  },{passive:true});
+  scroll.addEventListener('touchend',function(e){
+    if(tx===null)return;
+    var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+    tx=ty=null;
+    if(Math.abs(dx)>56&&Math.abs(dx)>Math.abs(dy)*1.6)show(idx+(dx<0?1:-1));
+  },{passive:true});
+
+  // --- the ribbon: mark here, unmark here, or return to where it's planted ---
+  function pressRibbon(){
+    if(markedPage===idx){markedPage=null;flash('Bookmark removed');}
+    else if(markedPage!==null){show(markedPage);flash('Returned to your ribbon');return;}
+    else{markedPage=idx;flash('Bookmarked — your place is held');}
+    ribbonState();save();
+  }
+  ribbon.addEventListener('click',pressRibbon);
+  ribbon.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pressRibbon();}});
+
+  // --- text size: a fixed ladder with 100% as the true baseline. BASE is
+  //     whatever the stylesheet says for this device (so 100% is honest on
+  //     mobile too), and stepping always lands exactly back on 100%. ---
+  var BASE=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--reading'))||1.0625;
+  var STEPS=[0.85,0.92,1,1.08,1.18,1.3,1.42],sizeIdx=2;   // index 2 === 100%
+  function applySize(){document.documentElement.style.setProperty('--reading',(BASE*STEPS[sizeIdx]).toFixed(4)+'rem');}
+  function nudge(d){
+    var n=Math.max(0,Math.min(STEPS.length-1,sizeIdx+d));
+    if(n===sizeIdx){flash(d<0?'Smallest text size':'Largest text size');return;}
+    sizeIdx=n;applySize();flash('Text size '+Math.round(STEPS[sizeIdx]*100)+'%');save();
+  }
+  document.getElementById('inc').addEventListener('click',function(){nudge(1);});
+  document.getElementById('dec').addEventListener('click',function(){nudge(-1);});
+
+  // --- wrap each voice's content (after .who) so veils and effects can target it ---
+  document.querySelectorAll('.v-cecilia,.v-architect,.v-rider,.v-interstitial').forEach(function(v){
+    var body=document.createElement('span');body.className='v-body';
+    [].slice.call(v.childNodes).forEach(function(n){
+      if(!(n.classList&&n.classList.contains('who')))body.appendChild(n);
+    });
+    v.appendChild(body);
+  });
+
+  // --- the hush: a pending hush gates the rest of the page. The page shows
+  //     content up to the first hush's placeholder; revealing swaps the block in
+  //     (its entrance animation fires right then — display:none defers CSS
+  //     animations) and reads on until the NEXT hush, whose placeholder takes over.
+  document.querySelectorAll('.page').forEach(function(pg){
+    var seq=[];
+    [].slice.call(pg.children).forEach(function(el){
+      if(el.classList.contains('folio'))return;
+      if(el.classList.contains('hush')){
+        var ph=document.createElement('button');
+        ph.type='button';ph.className='hush-ph';ph.textContent='reveal';
+        ph.setAttribute('aria-label','Reveal — continue reading');
+        pg.insertBefore(ph,el);
+        seq.push(ph);
+      }
+      seq.push(el);
+    });
+    // initial state: visible until the first placeholder; it gates all that follows
+    var open=true;
+    seq.forEach(function(el){
+      if(!open){el.classList.add('gate-hidden');return;}
+      if(el.classList.contains('hush-ph'))open=false;
+    });
+    // a click opens the run up to (and including) the next placeholder
+    seq.forEach(function(el,at){
+      if(!el.classList.contains('hush-ph'))return;
+      el.addEventListener('click',function(){
+        el.remove();
+        var step=0;
+        for(var i=at+1;i<seq.length;i++){
+          var n=seq[i];
+          if(n.classList.contains('hush-ph')){n.classList.remove('gate-hidden');break;}
+          n.style.setProperty('--i',step++);   // re-stagger the newly exposed run
+          n.classList.remove('gate-hidden','hush');
+        }
+      });
+    });
+  });
+
+  // --- rider emphasis: split into letters so each facet catches the light in
+  //     turn — with each WORD kept whole (nowrap wrapper) so lines never break
+  //     mid-word.
+  document.querySelectorAll('.v-rider em').forEach(function(em){
+    var frag=document.createDocumentFragment(),li=0;
+    em.textContent.split(/(\s+)/).forEach(function(tok){
+      if(!tok)return;
+      if(/^\s+$/.test(tok)){frag.appendChild(document.createTextNode(tok));return;}
+      var w=document.createElement('span');w.className='glw';
+      tok.split('').forEach(function(ch){
+        var s=document.createElement('span');s.className='gl';
+        s.style.setProperty('--li',li++);s.textContent=ch;w.appendChild(s);
+      });
+      frag.appendChild(w);
+    });
+    em.textContent='';em.appendChild(frag);
+  });
+
+  // --- restore ---
+  try{var st=JSON.parse(localStorage.getItem(KEY)||'{}');
+    if(typeof st.sizeIdx==='number'&&STEPS[st.sizeIdx]!=null){sizeIdx=st.sizeIdx;applySize();}
+    else if(typeof st.size==='number'){ // legacy rem value -> snap to the nearest step
+      var pct=st.size/BASE,best=2;
+      STEPS.forEach(function(s,i){if(Math.abs(s-pct)<Math.abs(STEPS[best]-pct))best=i;});
+      sizeIdx=best;applySize();
+    }
+    if(typeof st.mark==='number'&&st.mark>=0&&st.mark<pages.length)markedPage=st.mark;
+    show(typeof st.page==='number'?st.page:0);
+  }catch(e){show(0);}
+})();
+</script>
+</body>
+</html>
